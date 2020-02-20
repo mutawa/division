@@ -22,11 +22,11 @@ svg {
     font-size: 3em;
 }
 
-.handle text.divisee {
+.handle text.denominator {
     text-anchor: end;
 }
 
-.handle text.divisor {
+.handle text.numerator {
     text-anchor: start;
 }
 .pad .num rect {
@@ -46,4 +46,20 @@ svg {
 .pad .clear
 {
     fill: pink !important; 
+}
+
+.pad .digit {
+    text-anchor: middle;
+    /* stroke-width: 1;
+    stroke: black;
+    fill: beige; */
+    
+}
+.start {
+    fill: lightgreen;
+    cursor: pointer;
+}
+.start:hover 
+{
+    fill: gold;
 }
