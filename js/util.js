@@ -17,7 +17,7 @@ Number.prototype.arb = function () {
 function random(min=2,max=1) {
     if(min>max) {
         max = min;
-        min = 0;
+        min = 2;
     }
     min = Math.ceil(min);
     max = Math.floor(max);

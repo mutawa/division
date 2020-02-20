@@ -29,3 +29,21 @@ svg {
 .handle text.divisor {
     text-anchor: start;
 }
+.pad .num rect {
+    fill: whitesmoke;
+    /* pointer-events: all; */
+}
+.pad .num:hover rect {
+    fill : gold;
+    cursor: pointer;
+
+}
+
+.pad .enter 
+{
+    fill: lightgreen !important;
+}
+.pad .clear
+{
+    fill: pink !important; 
+}
