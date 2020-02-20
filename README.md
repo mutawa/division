@@ -4,7 +4,8 @@ This tool will make it easy for elementary school kids to learn long division be
 
 ## How to run the game
 
-`git clone https://github.com/mutawa/division`
-`cd division`
-`open index.html`
- 
+```
+git clone https://github.com/mutawa/division`
+cd division
+open index.html
+```
