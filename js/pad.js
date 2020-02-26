@@ -7,7 +7,8 @@ function Pad({svg}) {
     let h = 20;
     let w = 40;
 
-    g.append("circle").attr("fill","darkgreen").attr("r",10);
+    //g.append("circle").attr("fill","darkgreen").attr("r",10);
+    g.append("path").attr("d","M0,0 L20,8 L60,8 L60,90 L-62,90 L-62,8 L-20,8 z").attr("fill", "white").attr("stroke-width", 0.25).attr("stroke", "black");
 
 
     let buttons = [1,2,3,4,5,6,7,8,9,"↵", 0, "⌫"];
@@ -53,7 +54,7 @@ function Pad({svg}) {
     this.moveTo = function(x,y) {
         this.x = x;
         this.y = y;
-        this.scale = 1.5;
+        this.scale = 2;
 
         g.transition().duration(500)
             .attr("opacity", 1)

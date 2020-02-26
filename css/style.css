@@ -99,22 +99,26 @@ svg {
     padding: 0.2em 0.9em;
 }
 
-.digits .digit
+.digit
 {
-    text-anchor: middle;
+    text-anchor: start;
 }
 
-.digit .holder
+.digit .holder {
+    stroke-width: 0;
+    fill: transparent;
+}
+.digit.enabled .holder
 {
     stroke-width: 0.5;
     fill: white;
 }
 
-.digit:hover {
+.digit.enabled:hover {
     cursor: pointer;
 
 }
 
-.digit:hover rect {
+.digit.enabled:hover rect {
     fill: gold;
 }

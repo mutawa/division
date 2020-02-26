@@ -1,7 +1,12 @@
 
 function Handle({numerator,denominator,svg}) {
+    const POS_NUMERATOR = 1;
+    const POS_DENOMINATOR = 2;
+    const POS_RESULT = 3;
+
     this.num = numerator;
     this.den = denominator;
+    this.result = Math.floor(this.num / this.den);
 
     svg.selectAll(".handle").transition()
                                 .attr("opacity",0)
@@ -19,11 +24,41 @@ function Handle({numerator,denominator,svg}) {
         h.append("line").attr("x1", 0).attr("x2", -90).attr("y1", 70).attr("y2", 70);
     }
 
-    this.putNumerator = function () {
-        let g = h.append("g").attr("class", "numerator").attr("transform", `translate(140,-200)`);
-        g.append("circle").attr("r",5).attr("fill", "red").attr("stroke", "none");
+    this.set = function (n, position = POS_NUMERATOR) {
+        let className, x0,y0,xn,yn;
 
-        let dg = g.selectAll(".digits").data(this.num.arb().split("")).enter().append("g").attr("class", "digit");
+        switch(position) {
+            case POS_NUMERATOR:
+                className = "numerator";
+                x0 = 100;
+                y0 = -150;
+                xn = 25;
+                yn = 60;
+                break;
+            case POS_DENOMINATOR:
+                className = "denominator";
+                x0 = -140;
+                y0 = -150;
+                xn = -80;
+                yn = 60;
+                break;
+            case POS_RESULT:
+                className = "result";
+                x0 = 0;
+                y0 = -1000;
+                xn = 25;
+                yn = 0;
+                break;
+            default: return;
+        }
+        
+
+        h.select("." + className).remove();
+
+        let g = h.append("g").attr("class", className).attr("transform", `translate(${x0},${y0})`);
+        //g.append("circle").attr("r",5).attr("fill", "red").attr("stroke", "none");
+
+        let dg = g.selectAll(".digits").data(n.arb().split("")).enter().append("g").attr("class", "digit");
         dg.attr("transform", (d,i) => `translate(${i*40},0)`)
         
         dg.append("rect")
@@ -35,52 +70,54 @@ function Handle({numerator,denominator,svg}) {
             .attr("rx", 4)
             .attr("opacity", 0);
 
-        dg.append("circle").attr("r",4).attr("fill", "red").attr("stroke-width", 1);
+        //dg.append("circle").attr("r",4).attr("fill", "red").attr("stroke-width", 1);
 
 
         dg.append("text")
             .attr("x",  15)
             .text(d => d);
-
+        
         dg.on("click", function(){
+            let hx = Number(d3.select(this.parentNode.parentNode).attr("transform").replace(/[^\d,]/g,'').split(',')[0]);
+            let hy = Number(d3.select(this.parentNode.parentNode).attr("transform").replace(/[^\d,]/g,'').split(',')[1]);
             let ax = Number(d3.select(this.parentNode).attr("transform").replace(/[^\d,]/g,'').split(',')[0]);
             let ay = Number(d3.select(this.parentNode).attr("transform").replace(/[^\d,]/g,'').split(',')[1]);
             let dx = Number(d3.select(this).attr("transform").replace(/[^\d,]/g,'').split(',')[0]);
             let dy = Number(d3.select(this).attr("transform").replace(/[^\d,]/g,'').split(',')[1]);
-            pad.moveTo(ax + dx, ay + dy);
+            d3.select(this).attr("x", hx + ax + dx).attr("y", - hy + ay + dy);
+            
         });
         
         g.transition()
             .delay(1000)
-            .attr("transform", `translate(25,60)`);
+            .attr("transform", `translate(${xn},${yn})`);
 
         dg.selectAll(".holder").transition().delay(3000).duration(1000).attr("opacity", 0.5);
 
 
-
-        h.append("text")
-            .attr("class", "symbol")
-            .attr("opacity", 1)
-            .attr("transform", `translate(50,-200)`).text(" ÷ ")
-            .transition()
-            .duration(1000)
-            .delay(2000)
-            .attr("opacity", `0`)
-            .on("end", ()=>{
-                d3.select(".symbol").remove();
-            });
+        if(position == POS_NUMERATOR) {
+            h.append("text")
+                .attr("class", "symbol")
+                .attr("opacity", 1)
+                .attr("transform", `translate(50,${y0})`).text(" ÷ ")
+                .transition()
+                .duration(1000)
+                .delay(2000)
+                .attr("opacity", `0`)
+                .on("end", ()=>{
+                    d3.select(".symbol").remove();
+                });
+            }
 
 
     }
-    this.putDenomintator = function () {
-
-        h.append("text")
-            .attr("class", "denominator")
-            .attr("transform", `translate(-140,-200)`).text(this.den.arb())
-            .transition()
-            .delay(2000)
-            .attr("transform", `translate(-80,60)`);
+    
+    this.setEnableSelection = function(value) {
+        
+        d3.selectAll(".digit").classed("enabled", value);
+        
     }
+
     this.moveBy = function (x, y) {
         let txt = h.attr("transform").replace("translate(", "").replace(")", "");
         let x0 = Number(txt.split(",")[0]);
@@ -94,9 +131,10 @@ function Handle({numerator,denominator,svg}) {
     }
 
     this.draw();
-    this.putNumerator();
-    this.putDenomintator();
-
+    this.set(this.num, POS_NUMERATOR);
+    this.set(this.den, POS_DENOMINATOR);
+    this.set(this.result, POS_RESULT);
+    
     let that = this;
     svg.on("click",function() {
         let coords = d3.mouse(this);

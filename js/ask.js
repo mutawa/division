@@ -1,5 +1,7 @@
-function ask({defaultValues, splitter, buttonText, callback}) {
+function ask({defaultValues, questionText, splitter, buttonText, callback}) {
     d3.select("#ask .btn").on("click", null);
+    d3.select("#ask h2").text(questionText);
+
     d3.select("#ask").style("display", "block").style("opacity", 1);
     let div = d3.select("#ask > div");
     div.html("");
@@ -21,7 +23,9 @@ function ask({defaultValues, splitter, buttonText, callback}) {
         d3.selectAll("#ask input").nodes().forEach(function(n){
             values.push(Number(n.value));
         });
-        callback(values);
+        if(callback) {
+            callback(values);
+        }
     });
 
 }
