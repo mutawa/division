@@ -2,28 +2,64 @@
 function Handle({numerator,denominator,svg}) {
     this.num = numerator;
     this.den = denominator;
-    svg.selectAll(".handle").transition().attr("opacity",0).on("end", function(){ d3.select(this).remove(); });
+
+    svg.selectAll(".handle").transition()
+                                .attr("opacity",0)
+                                .on("end", () => { d3.select(this).remove(); });
 
     const h = svg.append("g").attr("class", "handle")
                             .attr("opacity","1")
-                            .attr("transform", `translate(${width / 2},150)`);
+                            .attr("transform", `translate(${0},${0})`);
 
     this.hh = h;
 
     this.draw = function () {
-        h.append("line").attr("x1", -10).attr("x2", 220).attr("y1", 10).attr("y2", 10);
-        h.append("line").attr("x1", -10).attr("x2", -10).attr("y1", 10).attr("y2", 70);
-        h.append("line").attr("x1", -10).attr("x2", -90).attr("y1", 70).attr("y2", 70);
+        h.append("line").attr("x1", 0).attr("x2", 220).attr("y1", 10).attr("y2", 10);
+        h.append("line").attr("x1", 0).attr("x2", 0).attr("y1", 10).attr("y2", 70);
+        h.append("line").attr("x1", 0).attr("x2", -90).attr("y1", 70).attr("y2", 70);
     }
 
     this.putNumerator = function () {
+        let g = h.append("g").attr("class", "numerator").attr("transform", `translate(140,-200)`);
+        g.append("circle").attr("r",5).attr("fill", "red").attr("stroke", "none");
+
+        let dg = g.selectAll(".digits").data(this.num.arb().split("")).enter().append("g").attr("class", "digit");
+        dg.attr("transform", (d,i) => `translate(${i*40 - 20},0)`)
+        
+        dg.append("rect")
+            .attr("class", "holder")
+            .attr("x", 0)
+            .attr("width", 35)
+            .attr("y", -40)
+            .attr("height", 45)
+            .attr("rx", 4)
+            .attr("opacity", 0);
+
+
+        dg.append("text")
+            .attr("x",  30)
+            .text(d => d);
+            
+        
+        g.transition()
+            .delay(1000)
+            .attr("transform", `translate(35,60)`);
+
+        dg.selectAll(".holder").transition().delay(3000).duration(1000).attr("opacity", 0.5);
+
+
 
         h.append("text")
-            .attr("class", "numerator")
-            .attr("transform", `translate(140,-20)`).text(this.num.arb())
+            .attr("class", "symbol")
+            .attr("opacity", 1)
+            .attr("transform", `translate(50,-200)`).text(" ÷ ")
             .transition()
-            .delay(1000)
-            .attr("transform", `translate(0,60)`);
+            .duration(1000)
+            .delay(2000)
+            .attr("opacity", `0`)
+            .on("end", ()=>{
+                d3.select(".symbol").remove();
+            });
 
 
     }
@@ -31,10 +67,10 @@ function Handle({numerator,denominator,svg}) {
 
         h.append("text")
             .attr("class", "denominator")
-            .attr("transform", `translate(-60,-20)`).text(this.den.arb())
+            .attr("transform", `translate(-140,-200)`).text(this.den.arb())
             .transition()
             .delay(2000)
-            .attr("transform", `translate(-20,60)`);
+            .attr("transform", `translate(-80,60)`);
     }
     this.moveBy = function (x, y) {
         let txt = h.attr("transform").replace("translate(", "").replace(")", "");

@@ -3,6 +3,7 @@ html, body {
     padding: 0;
     margin: 0;
     height: 100%;
+    background-color: #def;
 }
 
 svg {
@@ -61,5 +62,59 @@ svg {
 }
 .start:hover 
 {
+    fill: gold;
+}
+
+#ask h2{
+    text-align: center;
+}
+#ask > div {
+    text-align: center;
+}
+
+#ask > div input, #ask .splitter {
+    display: inline;
+    margin: 0.15em;
+}
+
+#ask input {
+    border-radius: 2em;
+    max-width: 2.6em;
+    text-align: center;
+    font-size: 1.8em;
+}
+
+#ask .splitter {
+    font-size: 2em;
+}
+
+#ask .btn 
+{
+    display: inline-block;
+    font-size: 1.5em;
+    border: 1px solid darkgreen;
+    color: darkgreen;
+    background-color: lightgreen;
+    border-radius: 1em;
+    padding: 0.2em 0.9em;
+}
+
+.digits .digit
+{
+    text-anchor: middle;
+}
+
+.digit .holder
+{
+    stroke-width: 0.5;
+    fill: white;
+}
+
+.digit:hover {
+    cursor: pointer;
+
+}
+
+.digit:hover rect {
     fill: gold;
 }
