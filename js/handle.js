@@ -24,26 +24,35 @@ function Handle({numerator,denominator,svg}) {
         g.append("circle").attr("r",5).attr("fill", "red").attr("stroke", "none");
 
         let dg = g.selectAll(".digits").data(this.num.arb().split("")).enter().append("g").attr("class", "digit");
-        dg.attr("transform", (d,i) => `translate(${i*40 - 20},0)`)
+        dg.attr("transform", (d,i) => `translate(${i*40},0)`)
         
         dg.append("rect")
             .attr("class", "holder")
-            .attr("x", 0)
+            .attr("x", -35/2)
             .attr("width", 35)
             .attr("y", -40)
             .attr("height", 45)
             .attr("rx", 4)
             .attr("opacity", 0);
 
+        dg.append("circle").attr("r",4).attr("fill", "red").attr("stroke-width", 1);
+
 
         dg.append("text")
-            .attr("x",  30)
+            .attr("x",  15)
             .text(d => d);
-            
+
+        dg.on("click", function(){
+            let ax = Number(d3.select(this.parentNode).attr("transform").replace(/[^\d,]/g,'').split(',')[0]);
+            let ay = Number(d3.select(this.parentNode).attr("transform").replace(/[^\d,]/g,'').split(',')[1]);
+            let dx = Number(d3.select(this).attr("transform").replace(/[^\d,]/g,'').split(',')[0]);
+            let dy = Number(d3.select(this).attr("transform").replace(/[^\d,]/g,'').split(',')[1]);
+            pad.moveTo(ax + dx, ay + dy);
+        });
         
         g.transition()
             .delay(1000)
-            .attr("transform", `translate(35,60)`);
+            .attr("transform", `translate(25,60)`);
 
         dg.selectAll(".holder").transition().delay(3000).duration(1000).attr("opacity", 0.5);
 

@@ -20,6 +20,7 @@ function start() {
         }
         let all = svg.append("g").attr("class", "all").attr("transform", allTransform);
         handle = new Handle({svg:all, numerator: array[0], denominator: array[1]});
+        pad = new Pad({svg:all});
       });
     }
   });
@@ -34,7 +35,7 @@ function start() {
   //   handle = new Handle({svg:svg, numerator: num1, denominator: num2});
   // }});
 
-  //pad = new Pad({svg:svg});
+  //
 
   
   
